@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<!-- saved from url=(0079)file:///C:/Users/Fernando/Desktop/rick-and-morty/index.html/rick-and-morty.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal Multiverso | Rick and Morty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link href="./Portal Multiverso _ Rick and Morty_files/css2" rel="stylesheet">
+
+<style>
+  /* ========== Variáveis de tema ========== */
+  :root {
+    --fundo: #07080d;
+    --superficie: #11131c;
+    --superficie-2: #1a1d2b;
+    --borda: #2a2e44;
+    --texto: #e8ecf4;
+    --texto-suave: #98a0b8;
+    --portal: #97ce4c;
+    --portal-brilho: #b8ff3d;
+    --cosmico: #7b3fe4;
+    --cosmico-claro: #a67bff;
+    --vivo: #55cc44;
+    --morto: #ff4d5e;
+    --desconhecido: #8b93a7;
+    --raio: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Nunito", system-ui, sans-serif;
+    color: var(--texto);
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(123, 63, 228, .28), transparent 60%),
+      radial-gradient(700px 400px at -5% 10%, rgba(151, 206, 76, .14), transparent 60%),
+      var(--fundo);
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+  }
+
+  :focus-visible { outline: 3px solid var(--portal-brilho); outline-offset: 3px; }
+
+  /* ========== Cabeçalho ========== */
+  .cabecalho {
+    padding: 2.5rem 1.25rem 1.5rem;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .logo {
+    font-family: "Bangers", cursive;
+    font-size: clamp(2.6rem, 8vw, 5rem);
+    letter-spacing: 3px;
+    line-height: 1;
+    color: var(--portal-brilho);
+    text-shadow: 0 0 6px rgba(184, 255, 61, .7), 0 0 28px rgba(151, 206, 76, .45), 4px 4px 0 var(--cosmico);
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    flex-wrap: wrap;
+  }
+
+  /* Portal giratório ao lado do título (único elemento animado por conta própria) */
+  .portal {
+    width: clamp(48px, 9vw, 78px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #b8ff3d, #3bd16f, #0b3d2a, #97ce4c, #b8ff3d);
+    box-shadow: 0 0 24px rgba(184, 255, 61, .6), inset 0 0 18px rgba(0, 0, 0, .7);
+    animation: girar 6s linear infinite;
+    position: relative;
+  }
+  .portal::after {
+    content: "";
+    position: absolute;
+    inset: 22%;
+    border-radius: 50%;
+    background: radial-gradient(circle, #eaffc2 0%, #97ce4c 55%, #1c5c2c 100%);
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, .5);
+  }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  .subtitulo { color: var(--texto-suave); margin-top: .6rem; max-width: 60ch; }
+
+  .controles {
+    display: flex;
+    gap: .75rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .campo {
+    flex: 1 1 260px;
+    background: var(--superficie);
+    border: 2px solid var(--borda);
+    border-radius: 999px;
+    color: var(--texto);
+    font: inherit;
+    padding: .85rem 1.25rem;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .campo::placeholder { color: var(--texto-suave); }
+  .campo:focus { outline: none; border-color: var(--portal); box-shadow: 0 0 0 4px rgba(151, 206, 76, .2); }
+
+  select.campo { flex: 0 1 220px; cursor: pointer; }
+
+  /* ========== Grade de cards ========== */
+  main { flex: 1; max-width: 1200px; width: 100%; margin: 0 auto; padding: 0 1.25rem 2rem; }
+
+  .grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--superficie);
+    border: 2px solid var(--borda);
+    border-radius: var(--raio);
+    overflow: hidden;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+    display: flex;
+    flex-direction: column;
+    transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+  }
+  .card:hover, .card:focus-visible {
+    transform: translateY(-6px);
+    border-color: var(--portal);
+    box-shadow: 0 0 0 1px var(--portal), 0 0 26px rgba(151, 206, 76, .45), 0 12px 30px rgba(0, 0, 0, .5);
+  }
+
+  .card img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: var(--superficie-2); }
+
+  .card-corpo { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .35rem; }
+  .card-nome { font-weight: 800; font-size: 1.15rem; line-height: 1.2; }
+
+  .status { display: inline-flex; align-items: center; gap: .5rem; font-size: .92rem; color: var(--texto); }
+  .bolinha { width: 11px; height: 11px; border-radius: 50%; flex: none; background: var(--desconhecido); }
+  .bolinha.alive { background: var(--vivo); box-shadow: 0 0 8px var(--vivo); }
+  .bolinha.dead { background: var(--morto); box-shadow: 0 0 8px var(--morto); }
+
+  .info { font-size: .88rem; color: var(--texto-suave); }
+  .info b { color: var(--texto); font-weight: 600; }
+
+  /* ========== Skeleton de carregamento ========== */
+  .esqueleto { pointer-events: none; }
+  .esqueleto .bloco {
+    background: linear-gradient(100deg, var(--superficie-2) 30%, #262a3f 50%, var(--superficie-2) 70%);
+    background-size: 200% 100%;
+    animation: brilho 1.3s infinite linear;
+    border-radius: 8px;
+  }
+  .esqueleto .foto { aspect-ratio: 1; border-radius: 0; }
+  .esqueleto .linha { height: 14px; margin-top: 10px; }
+  @keyframes brilho { to { background-position: -200% 0; } }
+
+  /* ========== Mensagens de erro / vazio ========== */
+  .mensagem {
+    text-align: center;
+    padding: 4rem 1rem;
+    border: 2px dashed var(--borda);
+    border-radius: var(--raio);
+    color: var(--texto-suave);
+  }
+  .mensagem h2 { font-family: "Bangers", cursive; font-size: 2rem; letter-spacing: 1.5px; color: var(--portal-brilho); margin-bottom: .5rem; }
+
+  /* ========== Paginação ========== */
+  .paginacao { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+  .paginacao span { color: var(--texto-suave); min-width: 8ch; text-align: center; }
+
+  .botao {
+    background: linear-gradient(135deg, var(--cosmico), #5a24b8);
+    border: 2px solid var(--cosmico-claro);
+    color: #fff;
+    font: inherit;
+    font-weight: 800;
+    padding: .7rem 1.4rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: box-shadow .2s, transform .2s, opacity .2s;
+  }
+  .botao:hover:not(:disabled) { box-shadow: 0 0 20px rgba(166, 123, 255, .6); transform: translateY(-2px); }
+  .botao:disabled { opacity: .35; cursor: not-allowed; }
+
+  /* ========== Modal ========== */
+  .fundo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 4, 8, .82);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    z-index: 50;
+  }
+  .fundo-modal.aberto { display: flex; }
+
+  .modal {
+    background: var(--superficie);
+    border: 2px solid var(--portal);
+    border-radius: 20px;
+    box-shadow: 0 0 40px rgba(151, 206, 76, .35);
+    width: min(860px, 100%);
+    max-height: 92vh;
+    overflow-y: auto;
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 340px) 1fr;
+    animation: abrir .25s ease-out;
+  }
+  @keyframes abrir { from { transform: scale(.94); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .modal-imagem { width: 100%; height: 100%; object-fit: cover; display: block; min-height: 280px; }
+  .modal-conteudo { padding: 1.6rem; min-width: 0; }
+  .modal-conteudo h2 { font-family: "Bangers", cursive; font-size: 2.4rem; letter-spacing: 2px; color: var(--portal-brilho); line-height: 1.1; margin-bottom: .6rem; }
+
+  .fechar {
+    position: absolute;
+    top: .7rem;
+    right: .7rem;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--borda);
+    background: rgba(7, 8, 13, .85);
+    color: var(--texto);
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .fechar:hover { border-color: var(--morto); color: var(--morto); }
+
+  .detalhes { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem 1rem; margin: 1rem 0 1.2rem; }
+  .detalhes dt { font-size: .8rem; color: var(--texto-suave); }
+  .detalhes dd { font-weight: 600; }
+
+  .episodios-titulo { font-weight: 800; margin-bottom: .5rem; }
+  .episodios { list-style: none; max-height: 200px; overflow-y: auto; border: 1px solid var(--borda); border-radius: 10px; }
+  .episodios li { padding: .5rem .8rem; font-size: .9rem; border-bottom: 1px solid var(--borda); display: flex; gap: .7rem; }
+  .episodios li:last-child { border-bottom: 0; }
+  .episodios .codigo { color: var(--cosmico-claro); font-weight: 800; flex: none; }
+
+  /* ========== Rodapé ========== */
+  .rodape { text-align: center; padding: 1.8rem 1rem; border-top: 1px solid var(--borda); color: var(--texto-suave); font-size: .9rem; }
+  .rodape a { color: var(--portal); text-decoration: none; }
+  .rodape a:hover { text-decoration: underline; }
+
+  /* ========== Responsividade ========== */
+  @media (max-width: 680px) {
+    .modal { grid-template-columns: 1fr; }
+    .modal-imagem { max-height: 300px; min-height: 0; }
+    select.campo { flex: 1 1 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="cabecalho">
+  <h1 class="logo"><span class="portal" aria-hidden="true"></span>Portal Multiverso</h1>
+  <p class="subtitulo">Explore os personagens de Rick and Morty em todas as dimensões. Busque pelo nome ou filtre pelo status.</p>
+
+  <div class="controles">
+    <input id="campoBusca" class="campo" type="search" placeholder="Buscar personagem (ex.: Rick, Morty, Summer)" aria-label="Buscar personagem por nome" autocomplete="off">
+    <select id="filtroStatus" class="campo" aria-label="Filtrar por status">
+      <option value="">Todos os status</option>
+      <option value="alive">Vivo</option>
+      <option value="dead">Morto</option>
+      <option value="unknown">Desconhecido</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <div id="grade" class="grade" aria-live="polite"><button class="card" type="button" aria-label="Ver detalhes de Rick Sanchez">
+        <img src="./Portal Multiverso _ Rick and Morty_files/1.jpeg" alt="Foto de Rick Sanchez" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Rick Sanchez</span>
+          <span class="status">
+            <span class="bolinha alive"></span>
+            Vivo - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Adjudicator Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/8.jpeg" alt="Foto de Adjudicator Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Adjudicator Rick</span>
+          <span class="status">
+            <span class="bolinha dead"></span>
+            Morto - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Alien Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/15.jpeg" alt="Foto de Alien Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Alien Rick</span>
+          <span class="status">
+            <span class="bolinha unknown"></span>
+            Desconhecido - Alien
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Antenna Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/19.jpeg" alt="Foto de Antenna Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Antenna Rick</span>
+          <span class="status">
+            <span class="bolinha unknown"></span>
+            Desconhecido - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> unknown</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Aqua Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/22.jpeg" alt="Foto de Aqua Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Aqua Rick</span>
+          <span class="status">
+            <span class="bolinha unknown"></span>
+            Desconhecido - Humanoid
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Black Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/48.jpeg" alt="Foto de Black Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Black Rick</span>
+          <span class="status">
+            <span class="bolinha alive"></span>
+            Vivo - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Bootleg Portal Chemist Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/56.jpeg" alt="Foto de Bootleg Portal Chemist Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Bootleg Portal Chemist Rick</span>
+          <span class="status">
+            <span class="bolinha dead"></span>
+            Morto - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Commander Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/69.jpeg" alt="Foto de Commander Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Commander Rick</span>
+          <span class="status">
+            <span class="bolinha dead"></span>
+            Morto - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Cool Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/72.jpeg" alt="Foto de Cool Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Cool Rick</span>
+          <span class="status">
+            <span class="bolinha alive"></span>
+            Vivo - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Cop Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/74.jpeg" alt="Foto de Cop Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Cop Rick</span>
+          <span class="status">
+            <span class="bolinha alive"></span>
+            Vivo - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Cowboy Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/78.jpeg" alt="Foto de Cowboy Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Cowboy Rick</span>
+          <span class="status">
+            <span class="bolinha alive"></span>
+            Vivo - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Cronenberg Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/82.jpeg" alt="Foto de Cronenberg Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Cronenberg Rick</span>
+          <span class="status">
+            <span class="bolinha unknown"></span>
+            Desconhecido - Cronenberg
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Earth (C-137)</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Cyclops Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/86.jpeg" alt="Foto de Cyclops Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Cyclops Rick</span>
+          <span class="status">
+            <span class="bolinha dead"></span>
+            Morto - Humanoid
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Doofus Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/103.jpeg" alt="Foto de Doofus Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Doofus Rick</span>
+          <span class="status">
+            <span class="bolinha unknown"></span>
+            Desconhecido - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Earth (Replacement Dimension)</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Evil Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/119.jpeg" alt="Foto de Evil Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Evil Rick</span>
+          <span class="status">
+            <span class="bolinha dead"></span>
+            Morto - Humanoid
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Garment District Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/135.jpeg" alt="Foto de Garment District Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Garment District Rick</span>
+          <span class="status">
+            <span class="bolinha dead"></span>
+            Morto - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Insurance Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/164.jpeg" alt="Foto de Insurance Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Insurance Rick</span>
+          <span class="status">
+            <span class="bolinha unknown"></span>
+            Desconhecido - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Investigator Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/165.jpeg" alt="Foto de Investigator Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Investigator Rick</span>
+          <span class="status">
+            <span class="bolinha dead"></span>
+            Morto - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Juggling Rick">
+        <img src="./Portal Multiverso _ Rick and Morty_files/187.jpeg" alt="Foto de Juggling Rick" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Juggling Rick</span>
+          <span class="status">
+            <span class="bolinha unknown"></span>
+            Desconhecido - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Citadel of Ricks</span>
+        </div></button><button class="card" type="button" aria-label="Ver detalhes de Maximums Rickimus">
+        <img src="./Portal Multiverso _ Rick and Morty_files/215.jpeg" alt="Foto de Maximums Rickimus" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">Maximums Rickimus</span>
+          <span class="status">
+            <span class="bolinha dead"></span>
+            Morto - Human
+          </span>
+          <span class="info"><b>Gênero:</b> Masculino</span>
+          <span class="info"><b>Localização:</b> Rick's Memories</span>
+        </div></button></div>
+  <div id="mensagem"></div>
+
+  <nav class="paginacao" id="paginacao" aria-label="Paginação">
+    <button class="botao" id="botaoAnterior" disabled="">Anterior</button>
+    <span id="textoPagina">1 / 6</span>
+    <button class="botao" id="botaoProxima">Próxima</button>
+  </nav>
+</main>
+
+<footer class="rodape">
+  <p>Desenvolvido por <strong>Fernando Henrique</strong> com HTML, CSS e JavaScript puro.</p>
+  <p>Dados fornecidos pela API pública <a href="https://rickandmortyapi.com/" target="_blank" rel="noopener">The Rick and Morty API</a>. Projeto de estudo sem fins lucrativos.</p>
+</footer>
+
+<div id="fundoModal" class="fundo-modal" role="dialog" aria-modal="true" aria-labelledby="modalNome">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+  /* ========== Configuração e estado global ========== */
+  const URL_API = "https://rickandmortyapi.com/api";
+
+  const estado = {
+    pagina: 1,
+    totalPaginas: 1,
+    busca: "",
+    status: ""
+  };
+
+  const TRADUCAO_STATUS = { Alive: "Vivo", Dead: "Morto", unknown: "Desconhecido" };
+  const TRADUCAO_GENERO = { Male: "Masculino", Female: "Feminino", Genderless: "Sem gênero", unknown: "Desconhecido" };
+  const CLASSE_STATUS = { Alive: "alive", Dead: "dead", unknown: "unknown" };
+
+  /* Referências aos elementos da página */
+  const elGrade = document.getElementById("grade");
+  const elMensagem = document.getElementById("mensagem");
+  const elPaginacao = document.getElementById("paginacao");
+  const elTextoPagina = document.getElementById("textoPagina");
+  const botaoAnterior = document.getElementById("botaoAnterior");
+  const botaoProxima = document.getElementById("botaoProxima");
+  const campoBusca = document.getElementById("campoBusca");
+  const filtroStatus = document.getElementById("filtroStatus");
+  const fundoModal = document.getElementById("fundoModal");
+  const elModal = document.getElementById("modal");
+
+  /* Guarda o card que abriu o modal para devolver o foco ao fechar */
+  let elementoQueAbriuModal = null;
+
+  /* Escapa texto vindo da API antes de inserir no HTML */
+  function escaparHtml(texto) {
+    const div = document.createElement("div");
+    div.textContent = texto;
+    return div.innerHTML;
+  }
+
+  /* ========== Estados de interface ========== */
+  function mostrarSkeleton() {
+    elMensagem.innerHTML = "";
+    elPaginacao.hidden = true;
+    elGrade.innerHTML = Array.from({ length: 12 }, () => `
+      <div class="card esqueleto" aria-hidden="true">
+        <div class="bloco foto"></div>
+        <div class="card-corpo">
+          <div class="bloco linha" style="width:70%"></div>
+          <div class="bloco linha" style="width:45%"></div>
+          <div class="bloco linha" style="width:85%"></div>
+        </div>
+      </div>`).join("");
+  }
+
+  function mostrarMensagem(titulo, texto) {
+    elGrade.innerHTML = "";
+    elPaginacao.hidden = true;
+    elMensagem.innerHTML = `<div class="mensagem" role="alert"><h2>${titulo}</h2><p>${texto}</p></div>`;
+  }
+
+  /* ========== Busca de personagens na API ========== */
+  async function buscarPersonagens() {
+    mostrarSkeleton();
+
+    /* URLSearchParams monta a query string e já codifica caracteres especiais */
+    const parametros = new URLSearchParams({ page: estado.pagina });
+    if (estado.busca) parametros.set("name", estado.busca);
+    if (estado.status) parametros.set("status", estado.status);
+
+    try {
+      const resposta = await fetch(`${URL_API}/character/?${parametros}`);
+
+      /* A API devolve 404 quando nenhum personagem corresponde ao filtro */
+      if (resposta.status === 404) {
+        mostrarMensagem("Nenhum personagem encontrado", "Nesta dimensão não há ninguém com esses filtros. Tente outro nome ou status.");
+        return;
+      }
+      if (!resposta.ok) throw new Error(`Erro HTTP ${resposta.status}`);
+
+      const dados = await resposta.json();
+      estado.totalPaginas = dados.info.pages;
+      renderizarCards(dados.results);
+      atualizarPaginacao();
+    } catch (erro) {
+      console.error(erro);
+      mostrarMensagem("Falha na conexão interdimensional", "Não foi possível carregar os dados. Verifique sua internet e tente novamente.");
+    }
+  }
+
+  /* ========== Renderização dos cards ========== */
+  function renderizarCards(personagens) {
+    elMensagem.innerHTML = "";
+    elGrade.innerHTML = "";
+
+    personagens.forEach((personagem) => {
+      const card = document.createElement("button");
+      card.className = "card";
+      card.type = "button";
+      card.setAttribute("aria-label", `Ver detalhes de ${personagem.name}`);
+
+      card.innerHTML = `
+        <img src="${personagem.image}" alt="Foto de ${escaparHtml(personagem.name)}" loading="lazy">
+        <div class="card-corpo">
+          <span class="card-nome">${escaparHtml(personagem.name)}</span>
+          <span class="status">
+            <span class="bolinha ${CLASSE_STATUS[personagem.status] || ""}"></span>
+            ${TRADUCAO_STATUS[personagem.status] || personagem.status} - ${escaparHtml(personagem.species)}
+          </span>
+          <span class="info"><b>Gênero:</b> ${TRADUCAO_GENERO[personagem.gender] || personagem.gender}</span>
+          <span class="info"><b>Localização:</b> ${escaparHtml(personagem.location.name)}</span>
+        </div>`;
+
+      card.addEventListener("click", () => abrirModal(personagem, card));
+      elGrade.appendChild(card);
+    });
+  }
+
+  function atualizarPaginacao() {
+    elPaginacao.hidden = false;
+    elTextoPagina.textContent = `${estado.pagina} / ${estado.totalPaginas}`;
+    botaoAnterior.disabled = estado.pagina <= 1;
+    botaoProxima.disabled = estado.pagina >= estado.totalPaginas;
+  }
+
+  /* ========== Modal de detalhes ========== */
+  async function abrirModal(personagem, cardOrigem) {
+    elementoQueAbriuModal = cardOrigem;
+
+    elModal.innerHTML = `
+      <button class="fechar" id="botaoFechar" aria-label="Fechar detalhes">✕</button>
+      <img class="modal-imagem" src="${personagem.image}" alt="Foto ampliada de ${escaparHtml(personagem.name)}">
+      <div class="modal-conteudo">
+        <h2 id="modalNome">${escaparHtml(personagem.name)}</h2>
+        <span class="status">
+          <span class="bolinha ${CLASSE_STATUS[personagem.status] || ""}"></span>
+          ${TRADUCAO_STATUS[personagem.status] || personagem.status}
+        </span>
+        <dl class="detalhes">
+          <div><dt>Espécie</dt><dd>${escaparHtml(personagem.species)}</dd></div>
+          <div><dt>Gênero</dt><dd>${TRADUCAO_GENERO[personagem.gender] || personagem.gender}</dd></div>
+          <div><dt>Origem</dt><dd>${escaparHtml(personagem.origin.name)}</dd></div>
+          <div><dt>Localização atual</dt><dd>${escaparHtml(personagem.location.name)}</dd></div>
+          <div><dt>Tipo</dt><dd>${escaparHtml(personagem.type || "Não informado")}</dd></div>
+          <div><dt>Aparições</dt><dd>${personagem.episode.length} episódio(s)</dd></div>
+        </dl>
+        <p class="episodios-titulo">Episódios</p>
+        <ul class="episodios" id="listaEpisodios"><li>Carregando episódios...</li></ul>
+      </div>`;
+
+    fundoModal.classList.add("aberto");
+    document.body.style.overflow = "hidden";
+    document.getElementById("botaoFechar").addEventListener("click", fecharModal);
+    document.getElementById("botaoFechar").focus();
+
+    carregarEpisodios(personagem);
+  }
+
+  /* Busca todos os episódios em uma única requisição usando os IDs separados por vírgula */
+  async function carregarEpisodios(personagem) {
+    const lista = document.getElementById("listaEpisodios");
+    const ids = personagem.episode.map((url) => url.split("/").pop());
+
+    try {
+      const resposta = await fetch(`${URL_API}/episode/${ids.join(",")}`);
+      if (!resposta.ok) throw new Error(`Erro HTTP ${resposta.status}`);
+      let episodios = await resposta.json();
+
+      /* Com apenas um ID a API devolve um objeto em vez de uma lista */
+      if (!Array.isArray(episodios)) episodios = [episodios];
+
+      /* Ignora a resposta se o usuário já fechou ou trocou de modal */
+      if (!document.body.contains(lista)) return;
+
+      lista.innerHTML = episodios.map((ep) =>
+        `<li><span class="codigo">${ep.episode}</span><span>${escaparHtml(ep.name)}</span></li>`
+      ).join("");
+    } catch (erro) {
+      console.error(erro);
+      if (document.body.contains(lista)) lista.innerHTML = "<li>Não foi possível carregar os episódios.</li>";
+    }
+  }
+
+  function fecharModal() {
+    fundoModal.classList.remove("aberto");
+    document.body.style.overflow = "";
+    if (elementoQueAbriuModal) elementoQueAbriuModal.focus();
+  }
+
+  /* Fecha ao clicar fora da janela ou ao apertar Esc */
+  fundoModal.addEventListener("click", (evento) => {
+    if (evento.target === fundoModal) fecharModal();
+  });
+  document.addEventListener("keydown", (evento) => {
+    if (evento.key === "Escape" && fundoModal.classList.contains("aberto")) fecharModal();
+  });
+
+  /* ========== Eventos de busca, filtro e paginação ========== */
+
+  /* Debounce: espera o usuário parar de digitar antes de chamar a API */
+  function comAtraso(funcao, atrasoMs) {
+    let temporizador;
+    return (...argumentos) => {
+      clearTimeout(temporizador);
+      temporizador = setTimeout(() => funcao(...argumentos), atrasoMs);
+    };
+  }
+
+  campoBusca.addEventListener("input", comAtraso(() => {
+    estado.busca = campoBusca.value.trim();
+    estado.pagina = 1;
+    buscarPersonagens();
+  }, 400));
+
+  filtroStatus.addEventListener("change", () => {
+    estado.status = filtroStatus.value;
+    estado.pagina = 1;
+    buscarPersonagens();
+  });
+
+  botaoAnterior.addEventListener("click", () => {
+    if (estado.pagina > 1) {
+      estado.pagina--;
+      buscarPersonagens();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  botaoProxima.addEventListener("click", () => {
+    if (estado.pagina < estado.totalPaginas) {
+      estado.pagina++;
+      buscarPersonagens();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  });
+
+  /* Carga inicial */
+  buscarPersonagens();
+</script>
+
+
+</body></html>
